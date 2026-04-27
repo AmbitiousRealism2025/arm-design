@@ -1,0 +1,40 @@
+[
+  {
+    "id": "ios-running-tracker",
+    "prompt": "Make a clickable iOS prototype for a running tracker with 5 screens.",
+    "expected_output": "A local HTML prototype with multiple iPhone-framed or mobile-sized screens and verification screenshots.",
+    "assertions": [
+      "The output includes an HTML file.",
+      "At least five screens are visible or navigable.",
+      "Primary navigation or interactions work.",
+      "The design uses realistic running data, not lorem ipsum.",
+      "A verification screenshot exists or the limitation is documented.",
+      "Console errors are absent or documented."
+    ]
+  },
+  {
+    "id": "investor-deck-html-pdf",
+    "prompt": "Create a 10-slide investor deck as HTML and export a PDF.",
+    "expected_output": "A 16:9 HTML deck with a PDF export.",
+    "assertions": [
+      "The output includes a deck HTML file.",
+      "The deck has 10 slides or an explicit reason for a different count.",
+      "The deck has a narrative arc, not disconnected pages.",
+      "The PDF export exists if export tools are available.",
+      "Cover and representative content slides are visually verified.",
+      "Claims that require facts are sourced or marked as assumptions."
+    ]
+  },
+  {
+    "id": "launch-animation-mp4",
+    "prompt": "Build a 12-second launch animation for a fictional AI notebook and export MP4.",
+    "expected_output": "An HTML animation with timeline plan and MP4 export when ffmpeg is available.",
+    "assertions": [
+      "A timeline plan exists.",
+      "The animation runs from HTML.",
+      "The duration is approximately 12 seconds.",
+      "The MP4 export exists or ffmpeg limitation is documented.",
+      "Motion supports the concept rather than adding constant decoration."
+    ]
+  }
+]

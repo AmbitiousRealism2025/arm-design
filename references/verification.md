@@ -1,189 +1,143 @@
-# Verification：输出验证流程
+# Verification
 
-一些 design-agent 原生环境（如 Claude.ai Artifacts）有内置的 `fork_verifier_agent` 起 subagent 用 iframe 截图检查。大部分 agent 环境（Claude Code / Codex / Cursor / Trae / 等）里没有这个内置能力——用 Playwright 手动做就能覆盖相同的验证场景。
+Use this reference before delivering any generated HTML artifact.
 
-## 验证清单
+## Checklist
 
-每次产出HTML后，按这个清单做一遍：
+### 1. Browser Render
 
-### 1. 浏览器渲染检查（必做）
-
-最基础：**HTML能不能打开**？在macOS上：
+The file must open without a blank screen.
 
 ```bash
-open -a "Google Chrome" "/path/to/your/design.html"
+open -a "Google Chrome" "/path/to/design.html"
 ```
 
-或者用Playwright截图（下一节）。
+Or use the verification script.
 
-### 2. 控制台错误检查
-
-HTML文件里最常见的问题是JS报错导致白屏。用Playwright跑一遍：
+### 2. Console And Page Errors
 
 ```bash
-python ~/.claude/skills/claude-design/scripts/verify.py path/to/design.html
+python3 scripts/verify.py path/to/design.html
 ```
 
-这个脚本会：
-1. 用headless chromium打开HTML
-2. 截图保存到项目目录
-3. 抓取控制台错误
-4. 报告status
-
-详见`scripts/verify.py`。
-
-### 3. 多视口检查
-
-如果是响应式设计，抓多个viewport：
+Or:
 
 ```bash
-python verify.py design.html --viewports 1920x1080,1440x900,768x1024,375x667
+npm run verify -- path/to/design.html
 ```
 
-### 4. 交互检查
+The script:
 
-Tweaks、动画、按钮切换——默认的静态截图看不到。**建议让用户自己开浏览器点一遍**，或者用Playwright录屏：
+1. Opens the HTML in headless Chromium.
+2. Captures viewport and full-page screenshots.
+3. Collects console warnings/errors.
+4. Reports page errors.
+
+### 3. Multiple Viewports
+
+For responsive work:
+
+```bash
+python3 scripts/verify.py design.html --viewports 1920x1080,1440x900,768x1024,375x667
+```
+
+### 4. Interaction
+
+Static screenshots do not prove interaction. For prototypes, manually click the main path or write a small Playwright check.
+
+Minimum checks:
+
+- main navigation
+- important button or annotation
+- tab or mode switch
+
+### 5. Slide Decks
+
+Capture slide screenshots:
+
+```bash
+python3 scripts/verify.py deck.html --slides 10
+```
+
+## Setup
+
+```bash
+npm install
+npm run playwright:install
+python3 -m pip install -r requirements.txt
+python3 -m playwright install chromium
+```
+
+## Screenshot Patterns
+
+Viewport screenshot:
 
 ```python
-page.video.record('interaction.mp4')
+page.screenshot(path="viewport.png")
 ```
 
-### 5. 幻灯片逐页检查
-
-Deck类HTML，一张张截：
-
-```bash
-python verify.py deck.html --slides 10  # 截前10张
-```
-
-生成 `deck-slide-01.png`、`deck-slide-02.png`... 方便快速浏览。
-
-## Playwright Setup
-
-首次使用需要：
-
-```bash
-# 如果还没装
-npm install -g playwright
-npx playwright install chromium
-
-# 或者Python版
-pip install playwright
-playwright install chromium
-```
-
-如果用户已经全局安装 Playwright，直接用即可。
-
-## 截图最佳实践
-
-### 截完整页面
+Full page:
 
 ```python
-page.screenshot(path='full.png', full_page=True)
+page.screenshot(path="full.png", full_page=True)
 ```
 
-### 截viewport
+Element:
 
 ```python
-page.screenshot(path='viewport.png')  # 默认只截可见区域
+element = page.query_selector(".hero")
+element.screenshot(path="hero.png")
 ```
 
-### 截特定元素
+Retina:
 
 ```python
-element = page.query_selector('.hero-section')
-element.screenshot(path='hero.png')
+context = browser.new_context(device_scale_factor=2)
 ```
 
-### 高清截图
+Wait for animation:
 
 ```python
-page = browser.new_page(device_scale_factor=2)  # retina
+page.wait_for_timeout(2000)
 ```
 
-### 等动画结束再截
+## Common Failures
 
-```python
-page.wait_for_timeout(2000)  # 等2秒让动画settle
-page.screenshot(...)
-```
+### Blank Page
 
-## 把截图发给用户
+Check:
 
-### 本地截图直接打开
+- Babel or React failed to load
+- JSX syntax error
+- undefined component
+- scope not exported through `window`
+- style object collision
 
-```bash
-open screenshot.png
-```
+### Broken Animation
 
-用户会在自己的 Preview/Figma/VSCode/浏览器 里看。
+Check:
 
-### 上传图床分享链接
+- font loading
+- layout thrash
+- missing `window.__ready`
+- wrong duration
+- scene elements not reset
 
-如果需要给远程协作者看（比如 Slack/飞书/微信），让用户用自己的图床工具或 MCP 上传：
+### Wrong Fonts
 
-```bash
-python ~/Documents/写作/tools/upload_image.py screenshot.png
-```
+Wait for webfonts or self-host them.
 
-返回ImgBB的永久链接，可以粘贴到任何地方。
+### Layout Misalignment
 
-## 验证出错时
+Check:
 
-### 页面白屏
+- `box-sizing: border-box`
+- CSS reset
+- grid tracks
+- fixed dimensions
+- responsive constraints
+- text overflow
 
-控制台一定有错。先检查：
+## Delivery Rule
 
-1. React+Babel script tag的integrity hash对不对（见`react-setup.md`）
-2. 是不是`const styles = {...}`命名冲突
-3. 跨文件的组件有没有export到`window`
-4. JSX语法错误（babel.min.js不报错，换babel.js非压缩版）
-
-### 动画卡
-
-- 用Chrome DevTools Performance tab录一段
-- 找layout thrashing（频繁的reflow）
-- 动效优先用`transform`和`opacity`（GPU加速）
-
-### 字体不对
-
-- 检查`@font-face`的url是否可访问
-- 检查fallback字体
-- 中文字体加载慢：先显示fallback，加载完再切换
-
-### 布局错位
-
-- 检查`box-sizing: border-box`是否全局应用
-- 检查`*  margin: 0; padding: 0`reset
-- Chrome DevTools里打开gridlines看实际布局
-
-## 验证=设计师的第二双眼
-
-**永远要自己过一遍**。AI写代码时经常出现：
-
-- 看起来对但interaction有bug
-- 静态截图好但scroll时错位
-- 宽屏好看但窄屏崩
-- Dark mode忘了测
-- Tweaks切换后某些组件没响应
-
-**最后1分钟的验证可以省1小时的返工**。
-
-## 常用验证脚本命令
-
-```bash
-# 基础：打开+截图+抓错
-python verify.py design.html
-
-# 多viewport
-python verify.py design.html --viewports 1920x1080,375x667
-
-# 多slide
-python verify.py deck.html --slides 10
-
-# 输出到指定目录
-python verify.py design.html --output ./screenshots/
-
-# headless=false，打开真实浏览器给你看
-python verify.py design.html --show
-```
+Always inspect the screenshots yourself. Verification is not just "script exited 0"; it is the designer's second pair of eyes.

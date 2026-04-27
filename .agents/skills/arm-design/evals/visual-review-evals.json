@@ -1,0 +1,21 @@
+[
+  {
+    "id": "critique-specificity",
+    "prompt": "Review this landing page screenshot and give prioritized visual improvements.",
+    "assertions": [
+      "The critique separates what works from what should change.",
+      "The critique references specific page regions.",
+      "Recommendations are prioritized by impact.",
+      "At least three fixes are directly actionable."
+    ]
+  },
+  {
+    "id": "anti-slop-check",
+    "prompt": "Make this dashboard feel more premium and less AI-generated.",
+    "assertions": [
+      "The response identifies generic AI-slop patterns.",
+      "The proposed fix changes layout, hierarchy, data realism, or interaction design, not only colors.",
+      "The result avoids generic floating glass-card styling unless justified."
+    ]
+  }
+]

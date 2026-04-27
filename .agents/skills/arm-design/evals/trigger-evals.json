@@ -1,0 +1,62 @@
+[
+  {
+    "id": "prototype-ios-running",
+    "query": "Make a clickable iOS prototype for a running tracker with 5 screens.",
+    "should_trigger": true,
+    "primary_reference": "app-prototypes.md"
+  },
+  {
+    "id": "deck-investor",
+    "query": "Create a 10-slide investor deck as HTML and export a PDF.",
+    "should_trigger": true,
+    "primary_reference": "slide-decks.md"
+  },
+  {
+    "id": "motion-launch",
+    "query": "Build a 12-second HTML animation and export an MP4 launch teaser.",
+    "should_trigger": true,
+    "primary_reference": "motion-video.md"
+  },
+  {
+    "id": "critique-dashboard",
+    "query": "Review this dashboard screenshot and tell me how to improve the visual hierarchy.",
+    "should_trigger": true,
+    "primary_reference": "critique.md"
+  },
+  {
+    "id": "visual-direction",
+    "query": "Give me three visual directions for a premium AI finance app.",
+    "should_trigger": true,
+    "primary_reference": "design-direction-consultant.md"
+  },
+  {
+    "id": "ordinary-react-bug",
+    "query": "Fix this React hydration error in my production app.",
+    "should_trigger": false,
+    "reason": "Ordinary frontend bug fix, not a design artifact."
+  },
+  {
+    "id": "seo-metadata",
+    "query": "Add SEO metadata to this landing page.",
+    "should_trigger": false,
+    "reason": "SEO implementation, not visual design."
+  },
+  {
+    "id": "backend-api",
+    "query": "Create an Express API route for user search.",
+    "should_trigger": false,
+    "reason": "Backend implementation."
+  },
+  {
+    "id": "copy-only",
+    "query": "Rewrite this About page copy to sound more confident.",
+    "should_trigger": false,
+    "reason": "Pure copywriting with no visual artifact."
+  },
+  {
+    "id": "near-miss-css",
+    "query": "Center this button and fix the CSS media query.",
+    "should_trigger": false,
+    "reason": "Small CSS bug fix, not design direction or artifact creation."
+  }
+]

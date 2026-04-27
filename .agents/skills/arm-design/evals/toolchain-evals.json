@@ -1,0 +1,28 @@
+[
+  {
+    "id": "doctor-json",
+    "command": "npm run doctor",
+    "assertions": [
+      "Command exits 0 when required tools are present.",
+      "Output is valid JSON.",
+      "Each check includes name, status, and message or fix."
+    ]
+  },
+  {
+    "id": "verify-help",
+    "command": "npm run verify:json -- --help",
+    "assertions": [
+      "Command prints usage information.",
+      "No interactive prompt is required."
+    ]
+  },
+  {
+    "id": "verify-html-json",
+    "command": "npm run verify:json -- --input .agents/skills/arm-design/fixtures/simple.html --out /tmp/arm-design-verify --json",
+    "assertions": [
+      "Output is valid JSON.",
+      "A screenshot path is reported.",
+      "Console/page errors are reported as arrays."
+    ]
+  }
+]
