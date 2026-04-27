@@ -66,6 +66,19 @@ For a public URL, capture a screenshot:
 npx playwright screenshot https://example.com screenshot.png --viewport-size=1920,1080
 ```
 
+## Concept-Only Products
+
+If the user invents a product, brand, feature, or campaign in the prompt, treat the prompt as the source of truth instead of forcing public verification.
+
+- Create prompt-sourced `product-facts.md` and `brand-spec.md`.
+- Use `Source: User prompt` or `Source: Prompt brief`.
+- Mark invented facts with confidence `Brief`.
+- Keep unknowns under assumptions.
+- Do not imply launch status, customers, certifications, metrics, or compatibility unless the user supplied them.
+- Browse only when the user asks for real-world grounding, competitors, market context, or current references.
+
+When the workspace contains unrelated design tests, use artifact-scoped filenames such as `<artifact-slug>.product-facts.md`, `<artifact-slug>.brand-spec.md`, and `<artifact-slug>.asset-inventory.md`.
+
 ### Step 4: Extract A System
 
 From the context, identify:

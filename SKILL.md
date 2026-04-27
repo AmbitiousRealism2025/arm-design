@@ -12,6 +12,8 @@ Use this skill for high-fidelity visual deliverables made primarily in HTML.
 - Identify the artifact type: prototype, deck, motion/video, infographic, variant exploration, or critique.
 - If the task names a current product, brand, person, event, version, or technical spec, verify facts before designing.
 - If the task involves a brand or product, create or update `product-facts.md` and `brand-spec.md` before high-fidelity work.
+- For concept-only products invented by the user, use prompt-sourced `product-facts.md` and `brand-spec.md`; browse only when real-world grounding is requested.
+- Use artifact-scoped fact/spec filenames when the workspace contains unrelated design tests.
 - Build HTML-first unless the user explicitly requests another format.
 - Apply the anti-slop rules in `references/content-guidelines.md`.
 - Use starter components from `assets/` before rebuilding frames, deck shells, variation canvases, or animation engines.

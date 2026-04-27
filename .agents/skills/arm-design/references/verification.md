@@ -18,6 +18,20 @@ npm run doctor
 npm run verify:json -- --input path/to/index.html --out verification --json
 ```
 
+## Browser Fallback
+
+The Codex in-app browser is an accepted verification fallback when local Playwright import, package install, or browser automation is unavailable.
+
+Use it to:
+
+- Open the local file or localhost URL.
+- Capture and inspect screenshots.
+- Test primary navigation and interactions.
+- Check the browser console for errors.
+- Record that `browser-use:browser` was used as the verification path.
+
+If `npm run doctor` warns that `playwright-package` cannot be imported but browser QA passes, document both facts instead of blocking delivery.
+
 ## Prototype Checks
 
 - Screen count matches request.

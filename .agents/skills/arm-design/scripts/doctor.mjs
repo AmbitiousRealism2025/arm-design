@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
+import { createRequire } from 'node:module';
+import path from 'node:path';
 import process from 'node:process';
 
 const args = new Set(process.argv.slice(2));
@@ -39,6 +41,26 @@ function warn(name, message, fix, extra = {}) {
   return { name, status: 'warn', message, fix, ...extra };
 }
 
+function loadPlaywright() {
+  const attempts = [];
+  const loaders = [
+    ['current-workspace', createRequire(path.join(process.cwd(), 'package.json'))],
+    ['skill-package', createRequire(import.meta.url)],
+  ];
+
+  for (const [source, requireForSource] of loaders) {
+    try {
+      const mod = requireForSource('playwright');
+      if (mod?.chromium) return { ok: true, source };
+      attempts.push(`${source}: package loaded but chromium was unavailable`);
+    } catch (err) {
+      attempts.push(`${source}: ${err.message}`);
+    }
+  }
+
+  return { ok: false, attempts };
+}
+
 const checks = [];
 
 const nodeVersion = process.versions.node;
@@ -58,11 +80,16 @@ const python = run('python3', ['--version']);
 if (python.status === 0) checks.push(pass('python3', python.stdout || python.stderr));
 else checks.push(warn('python3', 'python3 was not found.', 'Install Python 3 if legacy scripts require it.'));
 
-try {
-  await import('playwright');
-  checks.push(pass('playwright-package', 'playwright package can be imported.'));
-} catch (err) {
-  checks.push(fail('playwright-package', 'playwright package could not be imported.', 'Run npm install, then npm run playwright:install.', { detail: err.message }));
+const playwrightPackage = loadPlaywright();
+if (playwrightPackage.ok) {
+  checks.push(pass('playwright-package', `playwright package can be imported from ${playwrightPackage.source}.`));
+} else {
+  checks.push(warn(
+    'playwright-package',
+    'playwright package could not be imported from the active workspace or skill package.',
+    'Run npm install, then npm run playwright:install; if that is unavailable, verify with the Codex in-app browser and document the fallback.',
+    { detail: playwrightPackage.attempts.join('\n') },
+  ));
 }
 
 const chromium = run('npx', ['playwright', 'install', '--dry-run', 'chromium']);

@@ -14,6 +14,8 @@ open -a "Google Chrome" "/path/to/design.html"
 
 Or use the verification script.
 
+The Codex in-app browser is an accepted fallback when local Playwright import, package install, or browser automation is unavailable. Open the local file or localhost URL, capture or inspect the rendered page, test primary interactions, check the console, and document that browser verification was used.
+
 ### 2. Console And Page Errors
 
 ```bash
@@ -67,6 +69,8 @@ npm run playwright:install
 python3 -m pip install -r requirements.txt
 python3 -m playwright install chromium
 ```
+
+If `npm run doctor` warns that the Playwright package cannot be imported but the in-app browser QA passes, record both facts instead of blocking delivery.
 
 ## Screenshot Patterns
 

@@ -43,6 +43,8 @@ Visual direction if the user asks for:
 - give me directions
 - explore design variants
 
+Concept-only product if the user invents the product, brand, feature, or campaign in the brief. Load `references/fact-and-asset-protocol.md`, but use prompt-sourced `product-facts.md` and `brand-spec.md` rather than internet verification unless the user asks for real-world grounding.
+
 ## Choose Mode
 
 Use Execute Mode when the brief is enough to produce a plausible first draft.

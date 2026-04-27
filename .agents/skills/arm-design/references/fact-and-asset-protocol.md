@@ -14,6 +14,22 @@ Create or update:
 - `brand-spec.md`
 - `asset-inventory.md` when there are multiple images, logos, videos, or fonts
 
+If the workspace contains multiple unrelated design tests, use artifact-scoped filenames instead:
+
+- `<artifact-slug>.product-facts.md`
+- `<artifact-slug>.brand-spec.md`
+- `<artifact-slug>.asset-inventory.md`
+
+## Concept-Only Products
+
+If the user is inventing a product, brand, feature, or campaign in the prompt, do not force internet verification. Treat the prompt as the source of truth and create prompt-sourced files:
+
+- Mark facts as `Source: User prompt` or `Source: Prompt brief`.
+- Use confidence `Brief` for invented claims instead of `High`.
+- Keep unknowns under `Unverified Assumptions`.
+- Do not claim launch dates, market status, real customers, certifications, metrics, or compatibility unless the user supplied them.
+- Browse only if the user asks to ground the concept in real competitors, market context, technical constraints, or current references.
+
 ## When Internet Access Is Available
 
 Prefer sources in this order:
@@ -58,7 +74,7 @@ Current relevant version or status:
 
 | Fact | Source | Confidence | Notes |
 |---|---|---:|---|
-|  |  | High/Medium/Low |  |
+|  |  | High/Medium/Low/Brief |  |
 
 ## Unverified Assumptions
 

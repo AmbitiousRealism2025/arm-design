@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
@@ -49,17 +50,37 @@ if (!width || !height) {
   report({ ok: false, message: `Invalid --viewport value: ${viewportText}.`, fix: 'Use WIDTHxHEIGHT, for example 1920x1080.' }, 2);
 }
 
-let chromium;
-try {
-  ({ chromium } = await import('playwright'));
-} catch (err) {
+function loadPlaywright() {
+  const attempts = [];
+  const loaders = [
+    ['current-workspace', createRequire(path.join(process.cwd(), 'package.json'))],
+    ['skill-package', createRequire(import.meta.url)],
+  ];
+
+  for (const [source, requireForSource] of loaders) {
+    try {
+      const mod = requireForSource('playwright');
+      if (mod?.chromium) return { ok: true, chromium: mod.chromium, source };
+      attempts.push(`${source}: package loaded but chromium was unavailable`);
+    } catch (err) {
+      attempts.push(`${source}: ${err.message}`);
+    }
+  }
+
+  return { ok: false, attempts };
+}
+
+const playwrightPackage = loadPlaywright();
+if (!playwrightPackage.ok) {
   report({
     ok: false,
     error: 'playwright-import-failed',
-    message: err.message,
-    fix: 'Run npm install, then npm run playwright:install.',
+    message: 'playwright package could not be imported from the active workspace or skill package.',
+    fix: 'Run npm install, then npm run playwright:install. If local Playwright is unavailable, verify with the Codex in-app browser and document the fallback.',
+    detail: playwrightPackage.attempts.join('\n'),
   });
 }
+const { chromium } = playwrightPackage;
 
 const isUrl = /^https?:\/\//i.test(input) || /^file:\/\//i.test(input);
 const target = isUrl ? input : pathToFileURL(path.resolve(input)).href;
