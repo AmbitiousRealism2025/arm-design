@@ -138,6 +138,13 @@ Read [AGENTS.md](AGENTS.md) first when working in this repo. For local Codex use
 
 The root [SKILL.md](SKILL.md) is kept as a compact compatibility router, while `.agents/skills/arm-design/SKILL.md` is the local day-to-day skill entry point.
 
+To expose the optimized skill in Codex's **Available skills** list, sync it into `CODEX_HOME` and restart Codex:
+
+```bash
+mkdir -p ~/.codex/skills/arm-design
+cp -R .agents/skills/arm-design/. ~/.codex/skills/arm-design/
+```
+
 Install local tooling:
 
 ```bash

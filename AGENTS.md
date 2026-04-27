@@ -6,6 +6,7 @@ This repository is a local Codex-optimized skill for producing HTML-native desig
 
 - Prefer the local skill package in `.agents/skills/arm-design/`.
 - Read `.agents/skills/arm-design/SKILL.md` first, but do not bulk-load every reference file.
+- To advertise the skill in Codex's global Available skills list, sync `.agents/skills/arm-design/` to `$CODEX_HOME/skills/arm-design` and restart Codex.
 - Use the root `SKILL.md` as a compatibility mirror of the compact router.
 - Route by task type using the local skill's focused references.
 - Prefer the starter components in `assets/` over rewriting common shells such as iPhone frames, deck stages, animation stages, or variation canvases.

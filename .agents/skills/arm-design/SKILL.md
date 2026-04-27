@@ -1,6 +1,6 @@
 ---
 name: arm-design
-description: Use this skill when the user asks Codex to create, improve, or critique high-fidelity visual artifacts in HTML: clickable app/web prototypes, 1920x1080 slide decks, motion-design animations, MP4/GIF exports, design variants, infographics, or visual-direction exploration. Do not use for production web apps, backend features, SEO work, ordinary frontend bug fixes, or general website implementation unless the user asks for a visual artifact. Start from verified facts and brand/product assets, build HTML-first, and verify visually before delivery.
+description: "Use when the user asks Codex to design, build, improve, or critique a polished visual artifact where visual taste, hierarchy, typography, layout, brand feel, or marketing positioning are main evaluation criteria. Covers premium marketing sites, one-page landing pages, design taste tests, frontend visual design, polished product pages, restrained premium software, clickable prototypes, browser-native slide decks, motion animations, MP4/GIF exports, design variants, infographics, and expert reviews. Use this before imagegen; call imagegen only from inside this workflow when a raster asset materially improves the page. Do not use for backend features, production SEO, or ordinary frontend bug fixes unless the user asks for visual direction."
 ---
 
 # Arm Design
@@ -13,6 +13,7 @@ Use this skill for high-fidelity visual deliverables made primarily in HTML.
 - If the task names a current product, brand, person, event, version, or technical spec, verify facts before designing.
 - If the task involves a brand or product, create or update `product-facts.md` and `brand-spec.md` before high-fidelity work.
 - Build HTML-first unless the user explicitly requests another format.
+- Use this workflow before `imagegen`; call `imagegen` only when a bespoke raster asset materially improves the artifact.
 - Run visual verification before final delivery whenever the environment allows it.
 - Record assumptions only when they affect the artifact.
 - Use design rationale, not private reasoning traces.
